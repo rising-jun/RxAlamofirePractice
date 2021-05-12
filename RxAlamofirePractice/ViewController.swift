@@ -6,12 +6,25 @@
 //
 
 import UIKit
+import RxSwift
 
 class ViewController: UIViewController {
-
+    
+    let airModel = AirModel()
+    var airListSubject = PublishSubject<[AirInfo]>()
+    let disposeBag = DisposeBag()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        view.backgroundColor = .white
+        airModel.airListSubject = airListSubject
+        airModel.gettingAirData()
+        
+        airListSubject.filter{$0.count != 0}.subscribe { airList in
+            print(airList.count)
+        }.disposed(by: disposeBag)
+        
     }
 
 
